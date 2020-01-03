@@ -4,25 +4,40 @@ import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
 import axios from 'axios';
+import decode from "jwt-decode";
+
+
 
 axios.interceptors.request.use(config => {
 
+
     if (document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")) {
-        let xhr = new XMLHttpRequest();
-        let params = JSON.stringify({jwt: document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")});
+        const decoded = decode(document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+        if (decoded.exp > Date.now() / 1000) {
 
-        xhr.open("POST","http://localhost:8080/authenticate/renew",false);
+            let xhr = new XMLHttpRequest();
+            let params = JSON.stringify({jwt: document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")});
 
-        xhr.setRequestHeader('Content-type', 'application/json');
-        xhr.setRequestHeader("Authorization", "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+            xhr.open("POST", "http://localhost:8080/authenticate/renew", false);
 
-        xhr.send(params);
-        document.cookie = "jwttoken=" + JSON.parse(xhr.response).jwt;
+            xhr.setRequestHeader('Content-type', 'application/json');
+            xhr.setRequestHeader("Authorization", "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
 
+            xhr.send(params);
+            document.cookie = "jwttoken=" + JSON.parse(xhr.response).jwt;
+
+            config.headers = {
+                Authorization: "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")
+            };
+
+        }
     }
+
+
 
     return config;
 }, error => {
+    console.log("We got an error")
     // handle the error
     return Promise.reject(error);
 });
