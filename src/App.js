@@ -12,6 +12,7 @@ import {
 } from "react-router-dom";
 
 import Users from "./Components/Users";
+import ChoreChartAdmin from "./Components/ChoreChartAdmin";
 
 // import './App.css';
 
@@ -59,6 +60,12 @@ class App extends React.Component {
                                 {/*<header className="App-header"/>*/}
                                 <Body/>
                             </Route>
+
+                            <Route exact path="/chorechart/admin">
+                                <ChoreChartAdmin/>
+                            </Route>
+
+
                             <Route exact path="/users">
                                 <Users setAuth={this.setAuth}/>
                             </Route>
