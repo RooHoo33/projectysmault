@@ -7,3 +7,4 @@ class ChoreChartChore extends React.Component{
     }
 
 }
+export default ChoreChartChore

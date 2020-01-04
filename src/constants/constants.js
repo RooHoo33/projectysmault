@@ -1,4 +1,6 @@
 // export const colorPrimary = "#4a80ae";
+import React from "react";
+
 export const colorPrimary = "#2D9ED6";
 export const colorSecondary = "#aa647b";
 export const colorError = "#d32f2f";

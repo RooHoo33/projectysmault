@@ -2,6 +2,7 @@ import React from "react";
 
 import * as Constants from "../../constants/constants"
 import axios from "axios";
+import DeleteEditSaveButtons from "../DeleteEditSaveButtons";
 
 
 class TermInfo extends React.Component {
@@ -9,17 +10,17 @@ class TermInfo extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            hover: false,
-            term: this.props.term
-        }
+            term: this.props.term,
+            delete: false,
+        };
 
         this.edit = this.edit.bind(this);
-        this.hover = this.hover.bind(this);
         this.handlePopulationChange = this.handlePopulationChange.bind(this);
         this.handleStartTermChange = this.handleStartTermChange.bind(this);
         this.handleEndTermChange = this.handleEndTermChange.bind(this);
         this.submit = this.submit.bind(this);
-        this.cancelEdit = this.cancelEdit.bind(this)
+        this.cancelEdit = this.cancelEdit.bind(this);
+        this.deleteConfirmation = this.deleteConfirmation.bind(this);
     }
 
     getPopulationInputStyle(date = false) {
@@ -37,21 +38,6 @@ class TermInfo extends React.Component {
         }
     }
 
-    getIconStyle(color = "black") {
-        return {
-            color: color,
-            margin: "auto auto",
-            fontSize: "28px",
-            letterSpacing: "8px",
-            textAlign: "center",
-            cursor: this.state.hover ? "pointer" : "context-menu"
-        }
-    }
-
-    hover() {
-        this.setState({hover: !this.state.hover});
-    }
-
     edit() {
         let localTerm = this.state.term;
         localTerm.edit = true;
@@ -61,6 +47,17 @@ class TermInfo extends React.Component {
         this.setState({term: localTerm})
 
     }
+
+    // delete() {
+    //     this.setState({delete: !this.state.delete})
+    // }
+
+    deleteConfirmation() {
+
+        this.props.deleteFun(this.state.term.id)
+
+    }
+
 
     cancelEdit() {
 
@@ -129,8 +126,7 @@ class TermInfo extends React.Component {
                     <p>{this.props.term.population}</p>
                     <p>{(typeof this.props.term.termStart === 'string' || this.props.term.termStart instanceof String) ? this.props.term.termStart : this.props.term.termStart.toDateString()}</p>
                     <p>{(typeof this.props.term.termEnd === 'string' || this.props.term.termEnd instanceof String) ? this.props.term.termEnd : this.props.term.termEnd.toDateString()}</p>
-                    <p style={this.getIconStyle()} onMouseEnter={this.hover} onMouseLeave={this.hover}
-                       onClick={this.edit} className="material-icons">edit</p>
+                    <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit} editFun={this.edit} cancelEditFun={this.cancelEdit} deleteConfirmationFun={this.deleteConfirmation}/>
                 </div>
             )
 
@@ -169,17 +165,7 @@ class TermInfo extends React.Component {
                                style={this.getPopulationInputStyle(true)} value={this.state.term.termEnd}
                                onChange={this.handleEndTermChange}/>
 
-                        {/*<i style={this.getIconStyle()} onMouseEnter={this.hover} onMouseLeave={this.hover}*/}
-                        {/*   onClick={this.submit}*/}
-                        {/*   className="material-icons">send</i>*/}
-                        <div style={{margin:"auto"}} className={"editThing"}>
-                            <p style={this.getIconStyle(Constants.colorSuccess)} onMouseEnter={this.hover} onMouseLeave={this.hover}
-                               onClick={this.submit}
-                               className="material-icons">send</p>
-                            <p style={this.getIconStyle(Constants.colorSecondary)} onMouseEnter={this.hover} onMouseLeave={this.hover}
-                               onClick={this.cancelEdit}
-                               className="material-icons">cancel</p>
-                        </div>
+                        <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit} editFun={this.edit} cancelEditFun={this.cancelEdit} deleteConfirmationFun={this.deleteConfirmation}/>
 
                     </div>
                 </div>
