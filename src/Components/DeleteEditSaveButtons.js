@@ -82,7 +82,7 @@ class DeleteEditSaveButtons extends React.Component {
                        onClick={this.props.submitFun}
                        className="material-icons">send</p>
                     &nbsp;
-                    <p style={this.getIconStyle(Constants.colorSecondary)} onMouseEnter={this.hovering}
+                    <p style={this.getIconStyle(Constants.colorWarning)} onMouseEnter={this.hovering}
                        onMouseLeave={this.notHovering}
                        onClick={this.props.cancelEditFun}
                        className="material-icons">cancel</p>

@@ -9,9 +9,14 @@ class TermInfo extends React.Component {
 
     constructor(props) {
         super(props);
+        let localTerm = this.props.term;
+        localTerm.originalTermStart = localTerm.termStart;
+        localTerm.originalTermEnd = localTerm.termEnd;
+        localTerm.originalPopulation = localTerm.population;
         this.state = {
-            term: this.props.term,
+            term: localTerm,
             delete: false,
+            error: false,
         };
 
         this.edit = this.edit.bind(this);
@@ -53,8 +58,19 @@ class TermInfo extends React.Component {
     // }
 
     deleteConfirmation() {
+        let currentComponent = this;
+        axios.delete(Constants.baseUrl + "rest/chorechart/admin/terminformation?id=" + this.state.term.id).then(res => {
 
-        this.props.deleteFun(this.state.term.id)
+            currentComponent.props.deleteFun(this.state.term.id);
+            currentComponent.setState({error: false});
+        }).catch(function (error) {
+
+            currentComponent.setState({error: true});
+            currentComponent.setState({delete: false});
+            // currentComponent.cancelEdit();
+
+        });
+
 
     }
 
@@ -120,29 +136,35 @@ class TermInfo extends React.Component {
         if (!this.state.term.edit) {
 
             return (
-                <div style={Constants.listRowStyle()} className={this.props.term.id}>
+                <div style={Constants.listRowStyle(false, this.state.error)} className={this.state.term.id}>
 
-                    <p>{this.props.term.active ? "Active" : "Inactive"}</p>
+                    {this.state.error &&
+                    <p style={{color: "black", width: "800px"}}>Error</p>
+
+
+                    }
+                    {!this.state.error &&
+                    <p>{this.state.term.active ? "Active" : "Inactive"}</p>
+
+                    }
                     <p>{this.props.term.population}</p>
-                    <p>{(typeof this.props.term.termStart === 'string' || this.props.term.termStart instanceof String) ? this.props.term.termStart : this.props.term.termStart.toDateString()}</p>
-                    <p>{(typeof this.props.term.termEnd === 'string' || this.props.term.termEnd instanceof String) ? this.props.term.termEnd : this.props.term.termEnd.toDateString()}</p>
-                    <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit} editFun={this.edit} cancelEditFun={this.cancelEdit} deleteConfirmationFun={this.deleteConfirmation}/>
+                    <p>{(typeof this.state.term.termStart === 'string' || this.state.term.termStart instanceof String) ? this.props.term.termStart : this.props.term.termStart.toDateString()}</p>
+                    <p>{(typeof this.state.term.termEnd === 'string' || this.state.term.termEnd instanceof String) ? this.props.term.termEnd : this.props.term.termEnd.toDateString()}</p>
+                    <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit} editFun={this.edit}
+                                           cancelEditFun={this.cancelEdit}
+                                           deleteConfirmationFun={this.deleteConfirmation}/>
                 </div>
             )
 
         } else {
 
-            let editTermStyle = Constants.listRowStyle()
 
-            if (this.state.error) {
-                editTermStyle.backgroundColor = Constants.colorError
-            }
             return (
 
                 <div className={"editTermAndPossibleError"}>
 
 
-                    <div style={editTermStyle} className={"editTerm"}>
+                    <div style={Constants.listRowStyle(false, this.state.error)} className={"editTerm"}>
                         {this.state.error &&
                         <p style={{color: "black", width: "800px"}}>Error</p>
 
@@ -165,7 +187,9 @@ class TermInfo extends React.Component {
                                style={this.getPopulationInputStyle(true)} value={this.state.term.termEnd}
                                onChange={this.handleEndTermChange}/>
 
-                        <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit} editFun={this.edit} cancelEditFun={this.cancelEdit} deleteConfirmationFun={this.deleteConfirmation}/>
+                        <DeleteEditSaveButtons submitFun={this.submit} editValue={this.state.term.edit}
+                                               editFun={this.edit} cancelEditFun={this.cancelEdit}
+                                               deleteConfirmationFun={this.deleteConfirmation}/>
 
                     </div>
                 </div>

@@ -13,8 +13,12 @@ class AddTermInfo extends React.Component {
 
         this.state = {
             loggedOn: true,
-            term: this.props.term,
-            error: false
+            population: 0,
+            termEnd: "",
+            termStart: "",
+            // term: this.props.term,
+            error: false,
+            edit: this.props.edit,
 
         };
         this.hover = this.hover.bind(this);
@@ -24,10 +28,13 @@ class AddTermInfo extends React.Component {
         this.submit = this.submit.bind(this);
 
     }
-    getIconStyle(){
+
+    getIconStyle() {
         return {
             color: Constants.colorSuccess,
+            textAlign:"right",
             marginTop: "11px",
+            marginRight: "20px",
             fontSize: "28px",
             cursor: this.state.hover ? "pointer" : "context-menu"
         }
@@ -41,79 +48,94 @@ class AddTermInfo extends React.Component {
             width: date ? "90%" : "40%",
             fontSize: "16px",
             // padding: "20px 0",
-            margin: "5px 0",
+            margin: "5px " + (date ? "8px" : "18px"),
             borderRadius: "5px",
             borderWidth: "1px",
             textIndent: "5px"
         }
     }
 
-    hover(){
+    hover() {
         this.setState({hover: !this.state.hover});
     }
 
     handlePopulationChange(event) {
-        let localTerm = this.state.term;
-        localTerm.population = parseInt(event.target.value, 10);
-        this.setState({term: localTerm});
+        this.setState({population: parseInt(event.target.value, 10)});
     }
 
     handleStartTermChange(event) {
-        let localTerm = this.state.term;
-        localTerm.termStart = event.target.value;
-        this.setState({term: localTerm});
+        this.setState({termStart: event.target.value});
     }
 
     handleEndTermChange(event) {
-        let localTerm = this.state.term;
-        localTerm.termEnd = event.target.value;
-        this.setState({term: localTerm});
+        this.setState({termEnd: event.target.value});
     }
-    submit(){
+
+    submit() {
 
         let currentComponent = this
+        let termInfo = {}
+        termInfo.termEnd = this.state.termEnd;
+        termInfo.termStart = this.state.termStart;
+        termInfo.population = this.state.population;
+        termInfo.active = false;
 
-        axios.post(Constants.baseUrl + "rest/chorechart/admin/termInformation", this.state.term).then(res => {
-            this.props.edit(false)
+        axios.post(Constants.baseUrl + "rest/chorechart/admin/terminformation", termInfo).then(res => {
+
+            let termInfo = res.data;
+
+            termInfo.deleted = false;
+            termInfo.edit = false;
+
+            termInfo.termStart = new Date(termInfo.termStart[0], termInfo.termStart[1] - 1, termInfo.termStart[2]);
+            termInfo.termEnd = new Date(termInfo.termEnd[0], termInfo.termEnd[1] - 1, termInfo.termEnd[2]);
+
+            this.props.addTermFun(res.data);
+            this.setState({
+                edit: false,
+                population: 0,
+                termEnd: "",
+                termStart: "",
+            })
 
 
         }).catch(function (error) {
 
-            if (error.response.status === 401) {
-                currentComponent.setState({error: true})
-            }
+            currentComponent.setState({error: true})
 
         });
 
-        alert("Submit")
     }
 
     render() {
+        if (!this.props.edit) {
+            return <div/>
+        }
         if (!this.state.loggedOn) {
             return <Redirect to={"/login"}/>
         }
-        if (this.state.error){
-            return <h1 style={{color:Constants.colorError}}>Error Please Try Again</h1>
+        if (this.state.error) {
+            return <h1 style={{color: Constants.colorError}}>Error Please Try Again</h1>
         }
-        // return (
-        //     <div style={Constants.listRowStyle()} className={"editTerm"}>
-        //         <p>{this.state.term.active ? "Active" : "Inactive"}</p>
-        //         <input type={"number"} className={"login-input"}
-        //                style={this.getPopulationInputStyle()} value={this.state.term.population}
-        //                onChange={this.handlePopulationChange}/>
-        //
-        //         <input type={"date"} className={"login-input"}
-        //                style={this.getPopulationInputStyle(true)} value={this.state.term.termStart}
-        //                onChange={this.handleStartTermChange}/>
-        //         <input type={"date"} className={"login-input"}
-        //                style={this.getPopulationInputStyle(true)} value={this.state.term.termEnd}
-        //                onChange={this.handleEndTermChange}/>
-        //
-        //         <i style={this.getIconStyle()} onMouseEnter={this.hover} onMouseLeave={this.hover} onClick={this.submit}
-        //            className="material-icons">send</i>
-        //
-        //     </div>
-        // )
+        return (
+            <div style={Constants.listRowStyle()} className={"editTerm"}>
+                <p>Inactive</p>
+                <input type={"number"} className={"login-input"}
+                       style={this.getPopulationInputStyle()}
+                       onChange={this.handlePopulationChange}/>
+
+                <input type={"date"} className={"login-input"}
+                       style={this.getPopulationInputStyle(true)}
+                       onChange={this.handleStartTermChange}/>
+                <input type={"date"} className={"login-input"}
+                       style={this.getPopulationInputStyle(true)}
+                       onChange={this.handleEndTermChange}/>
+
+                <i style={this.getIconStyle()} onMouseEnter={this.hover} onMouseLeave={this.hover} onClick={this.submit}
+                   className="material-icons">send</i>
+
+            </div>
+        )
     }
 
 }
