@@ -6,6 +6,8 @@ import {Redirect} from "react-router-dom";
 import TermInfo from "./ChoreChartAdmin/TermInfo";
 import AddTermInfo from "./ChoreChartAdmin/AddTermInfo";
 import ChoreChartChoreOrDay from "./ChoreChartAdmin/ChoreChartChoreOrDay";
+import ChoreChartFormPanel from "./ChoreChartAdmin/ChoreChartFormPanel";
+import autoBind from "auto-bind";
 
 
 class ChoreChartAdmin extends React.Component {
@@ -25,8 +27,10 @@ class ChoreChartAdmin extends React.Component {
             termInfosLoaded: false,
             editAChore: false,
             editADay: false,
-            hover:false,
+            hover: false,
         };
+
+        autoBind(this);
         this.deleteTermInformation = this.deleteTermInformation.bind(this);
         this.deleteChoreInformation = this.deleteChoreInformation.bind(this);
         this.deleteDayInformation = this.deleteDayInformation.bind(this);
@@ -35,7 +39,7 @@ class ChoreChartAdmin extends React.Component {
         this.addDay = this.addDay.bind(this);
 
         this.editATermFun = this.editATermFun.bind(this)
-        this.editAChoreFun= this.editAChoreFun.bind(this);
+        this.editAChoreFun = this.editAChoreFun.bind(this);
         this.editADayFun = this.editADayFun.bind(this);
     }
 
@@ -79,12 +83,7 @@ class ChoreChartAdmin extends React.Component {
         }
     }
 
-    getHeadingsStyles() {
-        return {
-            textIndent: "45px",
-            textAlign: "left", color: "black"
-        }
-    }
+
 
     getChoresAndDaysGridStyle() {
         return {
@@ -228,22 +227,22 @@ class ChoreChartAdmin extends React.Component {
         this.setState({editAChore: !this.state.editAChore});
     }
 
-    addChore(chore){
+    addChore(chore) {
         let chores = this.state.chores;
         chores.push(chore)
-        this.setState({chores:chores, editAChore:false})
+        this.setState({chores: chores, editAChore: false})
     }
 
-    addDay(day){
+    addDay(day) {
         let days = this.state.days;
         days.push(day)
-        this.setState({days:days, editADay:false})
+        this.setState({days: days, editADay: false})
     }
 
     render() {
         console.log(!this.state.termInfos && !this.state.choresLoaded && !this.state.daysLoaded)
 
-        if (!this.state.termInfos && !this.state.choresLoaded && !this.state.daysLoaded) {
+        if (!this.state.termInfos || !this.state.choresLoaded || !this.state.daysLoaded)  {
             return <div/>
         }
 
@@ -258,9 +257,14 @@ class ChoreChartAdmin extends React.Component {
 
 
             <div className={"ChoreChartAdmin"}>
+                <div style={this.getTermInfoGroupStyle()} className={"ChoreChartPanel"}>
+                    <ChoreChartFormPanel days={this.state.days}
+                                         chores={this.state.chores}
+                    />
+                </div>
 
                 <div style={this.getTermInfoGroupStyle()} className={"termInfos"}>
-                    <div style={this.getHeadingsStyles()} className={"termInfosHeader"}>
+                    <div style={Constants.getHeadingStyleChoreChartAdmin()} className={"termInfosHeader"}>
                         <h1 style={{float: "left"}}>Term Information</h1>
                         <p style={{
                             float: "right",
@@ -285,28 +289,37 @@ class ChoreChartAdmin extends React.Component {
                 </div>
 
                 <div style={this.getTermInfoGroupStyle()} className={"DaysAndChores"}>
-                    <h1 style={this.getHeadingsStyles()}>Chores And Days</h1>
+                    <h1 style={Constants.getHeadingStyleChoreChartAdmin()}>Chores And Days</h1>
+                    <p style={Constants.getHeadingStyleChoreChartAdmin()}>If you delete a chore or a day you will break any chore chart form and any users chore preferences that uses that day or chore. Please delete with caution.  If you are unsure please talk to Jack.</p>
                     <div style={this.getChoresAndDaysGridStyle()} className={"daysAndChoresGrid"}>
 
 
                         <div className={"choreChartChores"}>
 
-                            <div style={this.getHeadingsStyles()} className={"termInfosHeader"}>
+                            <div style={Constants.getHeadingStyleChoreChartAdmin()} className={"termInfosHeader"}>
                                 <h1 style={{float: "left", fontSize: "22px"}}>Chores</h1>
-                                <p style={{float:"right", marginRight:"40px",fontSize:"22px",cursor: this.state.hover ? "pointer" : "context-menu"}} onClick={this.editAChoreFun} className="material-icons" onMouseEnter={this.hovering} onMouseLeave={this.notHovering}>note_add</p>
+                                <p style={{
+                                    float: "right",
+                                    marginRight: "40px",
+                                    fontSize: "22px",
+                                    cursor: this.state.hover ? "pointer" : "context-menu"
+                                }} onClick={this.editAChoreFun} className="material-icons" onMouseEnter={this.hovering}
+                                   onMouseLeave={this.notHovering}>note_add</p>
 
                             </div>
                             {
                                 this.state.editAChore &&
-                                <ChoreChartChoreOrDay chore={true} addChoreOrDay={this.addChore} urlEnding={"chorechore"} deleteFun={deleteChoreInformation} edit={true} choreOrDay={{}}/>
+                                <ChoreChartChoreOrDay chore={true} addChoreOrDay={this.addChore}
+                                                      urlEnding={"chorechore"} deleteFun={deleteChoreInformation}
+                                                      edit={true} choreOrDay={{}}/>
 
-                                }
-
+                            }
 
 
                             {chores.map(function (chore) {
                                     if (!chore.deleted) {
-                                        return <ChoreChartChoreOrDay chore={true} urlEnding={"chorechore"} edit={false} deleteFun={deleteChoreInformation} choreOrDay={chore}/>
+                                        return <ChoreChartChoreOrDay chore={true} urlEnding={"chorechore"} edit={false}
+                                                                     deleteFun={deleteChoreInformation} choreOrDay={chore}/>
                                     }
                                 }
                             )}
@@ -315,22 +328,29 @@ class ChoreChartAdmin extends React.Component {
                         </div>
 
                         < div className={"choreChartDays"}>
-                            <div style={this.getHeadingsStyles()} className={"termInfosHeader"}>
+                            <div style={Constants.getHeadingStyleChoreChartAdmin()} className={"termInfosHeader"}>
                                 <h1 style={{float: "left", fontSize: "22px"}}>Days</h1>
-                                <p style={{float:"right", marginRight:"40px",fontSize:"22px",cursor: this.state.hover ? "pointer" : "context-menu"}} onClick={this.editADayFun} className="material-icons" onMouseEnter={this.hovering} onMouseLeave={this.notHovering}>note_add</p>
+                                <p style={{
+                                    float: "right",
+                                    marginRight: "40px",
+                                    fontSize: "22px",
+                                    cursor: this.state.hover ? "pointer" : "context-menu"
+                                }} onClick={this.editADayFun} className="material-icons" onMouseEnter={this.hovering}
+                                   onMouseLeave={this.notHovering}>note_add</p>
 
                             </div>
                             {
                                 this.state.editADay &&
-                                <ChoreChartChoreOrDay chore={false} addChoreOrDay={this.addDay} urlEnding={"choreday"} deleteFun={deleteDayInformation} edit={true} choreOrDay={{}}/>
+                                <ChoreChartChoreOrDay chore={false} addChoreOrDay={this.addDay} urlEnding={"choreday"}
+                                                      deleteFun={deleteDayInformation} edit={true} choreOrDay={{}}/>
 
                             }
 
 
-
                             {days.map(function (day) {
                                     if (!day.deleted) {
-                                        return <ChoreChartChoreOrDay chore={false} urlEnding={"choreday"} edit={false} deleteFun={deleteDayInformation} choreOrDay={day}/>
+                                        return <ChoreChartChoreOrDay chore={false} urlEnding={"choreday"} edit={false}
+                                                                     deleteFun={deleteDayInformation} choreOrDay={day}/>
                                     }
                                 }
                             )}

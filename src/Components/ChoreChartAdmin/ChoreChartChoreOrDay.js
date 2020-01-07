@@ -6,7 +6,6 @@ import DeleteEditSaveButtons from "../DeleteEditSaveButtons";
 
 
 class ChoreChartChoreOrDay extends React.Component {
-    choreName;
 
     constructor(props) {
         super(props);

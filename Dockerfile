@@ -1,8 +1,4 @@
-FROM arm32v7/node:8.17.0-jessie
-
-
-
-
+FROM arm32v7/node:8.17.0-jessie AS builder
 
 
 
@@ -11,17 +7,20 @@ WORKDIR /usr/src/app
 
 # install and cache app dependencies
 COPY package*.json ./
-ADD package.json /usr/src/app/package.json
+ADD . /usr/src/app
 RUN npm install
+RUN npm run build
 
 # Bundle app source
-COPY . .
-
+FROM arm32v7/node:8.17.0-jessie
+WORKDIR /usr/src/app
+RUN mkdir build
+COPY --from=builder /usr/src/app/ /build
 # Specify port
-EXPOSE 3000
+EXPOSE 5000
 
 # start app
-CMD ["npm", "start"]
+CMD ["server", "s", "."]
 
 
 

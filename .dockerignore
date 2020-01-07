@@ -1,8 +1,3 @@
-.dockerignore
 .git
-.go-pkg-cache
-.gopath
-bundles
-Dockerfile
-vendor/pkg
 node_modules
+build

@@ -59,4 +59,13 @@ export const choreAndDayInputStyle = function () {
 
 };
 
+export const getHeadingStyleChoreChartAdmin = function (){
+
+        return {
+            margin: "10px 45px",
+            textAlign: "left", color: "black"
+        }
+
+}
+
 export const baseUrl = "http://localhost:8080/";
