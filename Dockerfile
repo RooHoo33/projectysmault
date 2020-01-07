@@ -19,7 +19,7 @@ COPY --from=builder /usr/src/app/build .
 EXPOSE 5000
 
 # start app
-CMD ["server", "s", "."]
+CMD ["serve", "s", "."]
 
 
 
