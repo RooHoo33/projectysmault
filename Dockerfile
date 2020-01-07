@@ -12,7 +12,6 @@ RUN npm install && npm run build
 
 # Bundle app source
 FROM tobi312/rpi-nginx:alpine
-WORKDIR /usr/src/app
 RUN mkdir build
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
