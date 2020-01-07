@@ -14,7 +14,7 @@ RUN npm install && npm run build
 FROM arm32v7/node:8.17.0-jessie
 WORKDIR /usr/src/app
 RUN mkdir build
-COPY --from=builder /usr/src/app/build /build
+COPY --from=builder /usr/src/app/build ./build
 # Specify port
 EXPOSE 5000
 
