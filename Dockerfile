@@ -8,8 +8,7 @@ WORKDIR /usr/src/app
 # install and cache app dependencies
 COPY package*.json ./
 COPY . .
-RUN npm install
-RUN npm run build
+RUN npm install && npm run build
 
 # Bundle app source
 FROM arm32v7/node:8.17.0-jessie

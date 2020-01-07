@@ -15,7 +15,8 @@
     "react-dom": "^16.12.0",
     "react-scripts": "3.3.0",
     "react-spring": "^8.0.27",
-    "serve": "11.3.0"
+    "serve": "11.3.0",
+    "jwt-decode": "2.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
