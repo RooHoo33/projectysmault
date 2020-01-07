@@ -1,5 +1,5 @@
 FROM hypriot/rpi-node:latest
-
+USER node
 # set working directory
 WORKDIR /app
 
