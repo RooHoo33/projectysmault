@@ -1,23 +1,50 @@
 FROM arm32v7/node:8.17.0-jessie
 
-# Create a work directory and copy over our dependency manifest files.
-RUN mkdir /app
-WORKDIR /app
-COPY /src /app/src
-COPY ["package.json", "package-lock.json*", "./"]
 
-# If you're using yarn:
-#  yarn build
-RUN npm install --production && mv node_modules ../
 
-# Expose PORT 3000 on our virtual machine so we can run our server
+
+
+
+
+# set working directory
+WORKDIR /usr/src/app
+
+# install and cache app dependencies
+COPY package*.json ./
+ADD package.json /usr/src/app/package.json
+RUN npm install
+
+# Bundle app source
+COPY . .
+
+# Specify port
 EXPOSE 3000
 
+# start app
 CMD ["npm", "start"]
 
+
+
+
+
+# Create a work directory and copy over our dependency manifest files.
+#RUN mkdir /app
 #WORKDIR /app
-#COPY . ./
-#RUN yarn
+#COPY /src /app/src
+#COPY ["package.json", "package-lock.json*", "./"]
+#
+## If you're using yarn:
+##  yarn build
+#RUN npm install --production && mv node_modules ../
+#
+## Expose PORT 3000 on our virtual machine so we can run our server
+#EXPOSE 3000
+#
+#CMD ["npm", "start"]
+#
+##WORKDIR /app
+##COPY . ./
+##RUN yarn
 #RUN yarn build
 #
 ## Stage 2 - the production environment
