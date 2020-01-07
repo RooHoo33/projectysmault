@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: project-ysmault-deployment
+  labels:
+    app: project-ysmault
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: project-ysmault
+  template:
+    metadata:
+      labels:
+        app: project-ysmault
+    spec:
+      containers:
+        - name: py-server
+          image: roohoo/projectysmault:latest
+          ports:
+            - containerPort: 443
