@@ -15,6 +15,7 @@ FROM arm32v7/node:8.17.0-jessie
 WORKDIR /usr/src/app
 RUN mkdir build
 COPY --from=builder /usr/src/app/build .
+RUN npm i serve
 # Specify port
 EXPOSE 5000
 
