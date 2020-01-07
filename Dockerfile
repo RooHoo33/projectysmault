@@ -13,6 +13,8 @@ RUN npm install --production && mv node_modules ../
 # Expose PORT 3000 on our virtual machine so we can run our server
 EXPOSE 3000
 
+CMD ["npm", "start"]
+
 #WORKDIR /app
 #COPY . ./
 #RUN yarn
