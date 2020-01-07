@@ -15,11 +15,12 @@ FROM tobi312/rpi-nginx:alpine
 #RUN mkdir build
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
-#COPY cert.pem /etc/ssl/
-#COPY key.pem /etc/ssl
+COPY cert.pem /etc/ssl/
+COPY key.pem /etc/ssl
 #RUN npm i -g serve
 # Specify port
 EXPOSE 80
+EXPOSE 443
 
 # start app
 CMD ["nginx","-g","daemon off;"]
