@@ -11,17 +11,17 @@ COPY . .
 RUN npm install && npm run build
 
 # Bundle app source
-FROM arm32v7/node:8.17.0-jessie
+FROM tobi312/rpi-nginx:alpine
 WORKDIR /usr/src/app
 RUN mkdir build
-COPY --from=builder /usr/src/app/build .
-RUN npm i -g serve
+COPY --from=build-stage /usr/src/app/build/ /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+#RUN npm i -g serve
 # Specify port
-EXPOSE 5000
+EXPOSE 80
 
 # start app
-CMD ["serve", "-s"]
-
+ENTRYPOINT ["nginx","-g","daemon off;"]
 
 
 
