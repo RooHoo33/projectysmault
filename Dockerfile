@@ -12,7 +12,7 @@ RUN npm install && npm run build
 
 # Bundle app source
 FROM tobi312/rpi-nginx:alpine
-RUN mkdir build
+#RUN mkdir build
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 #COPY cert.pem /etc/ssl/
@@ -22,7 +22,7 @@ COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 80
 
 # start app
-ENTRYPOINT ["nginx","-g","daemon off;"]
+CMD ["nginx","-g","daemon off;"]
 
 
 
