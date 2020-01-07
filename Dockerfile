@@ -20,7 +20,7 @@ RUN npm i -g serve
 EXPOSE 5000
 
 # start app
-CMD ["serve", "s"]
+CMD ["serve", "-s"]
 
 
 
