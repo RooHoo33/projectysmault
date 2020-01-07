@@ -1,4 +1,4 @@
-FROM hypriot/rpi-node:latest
+FROM arm32v7/node:8.17.0-jessie
 WORKDIR /app
 COPY . ./
 RUN yarn
