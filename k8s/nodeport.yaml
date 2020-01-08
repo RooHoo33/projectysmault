@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: project-ysmault
+spec:
+  type: NodePort
+  ports:
+    - port: 443
+      nodePort: 30001
+  selector:
+    name: project-ysmault
