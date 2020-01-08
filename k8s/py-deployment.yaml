@@ -3,16 +3,16 @@ kind: Deployment
 metadata:
   name: project-ysmault
   labels:
-    app: project-ysmault
+    app: py-server
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: project-ysmault
+      app: py-server
   template:
     metadata:
       labels:
-        app: project-ysmault
+        app: py-server
     spec:
       containers:
         - name: py-server
