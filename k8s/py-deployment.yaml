@@ -15,7 +15,7 @@ spec:
         app: py-server
     spec:
       containers:
-        - name: py-server
+        - name: py-server-container
           image: roohoo/projectysmault:latest
           ports:
             - containerPort: 556
