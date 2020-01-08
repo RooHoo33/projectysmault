@@ -9,4 +9,3 @@ spec:
   type: NodePort
   ports:
     - port: 556
-      nodePort: 30001
