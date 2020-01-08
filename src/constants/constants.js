@@ -68,4 +68,4 @@ export const getHeadingStyleChoreChartAdmin = function (){
 
 }
 
-export const baseUrl = "http://localhost:8080/";
+export const baseUrl = "192.168.1.202:8084/";
