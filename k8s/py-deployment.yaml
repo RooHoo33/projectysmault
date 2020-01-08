@@ -18,4 +18,4 @@ spec:
         - name: py-server
           image: roohoo/projectysmault:latest
           ports:
-            - containerPort: 443
+            - containerPort: 556
