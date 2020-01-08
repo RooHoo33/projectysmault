@@ -5,5 +5,5 @@ metadata:
 spec:
   type: NodePort
   ports:
-    - port: 443
+    - port: 556
       nodePort: 30001
