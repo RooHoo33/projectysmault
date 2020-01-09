@@ -8,7 +8,7 @@ export const colorErrorBackground = "#ac5656";
 export const colorWarning = "#ffa000";
 export const colorInfo = "#1976d2";
 export const colorSuccess = "#388e3c";
-export const colorGreenMaterial = "#4BBA87"
+export const colorGreenMaterial = "#4BBA87";
 export const backgroundSecondaryColor = "#3f4552";
 
 
