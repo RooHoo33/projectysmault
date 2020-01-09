@@ -14,7 +14,7 @@
 FROM tobi312/rpi-nginx:alpine
 #RUN mkdir build
 #COPY --from=builder /usr/src/app/build /usr/share/nginx/html
-COPY build/ /usr/share/nginx/html
+COPY build/* /usr/share/nginx/html
 
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY cert.pem /etc/ssl/
