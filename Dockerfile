@@ -1,19 +1,21 @@
-FROM arm32v7/node:8.17.0-jessie AS builder
-
-
-
-# set working directory
-WORKDIR /usr/src/app
-
-# install and cache app dependencies
-COPY package*.json ./
-COPY . .
-RUN npm install && npm run build
+#FROM arm32v7/node:8.17.0-jessie AS builder
+#
+#
+#
+## set working directory
+#WORKDIR /usr/src/app
+#
+## install and cache app dependencies
+#COPY package*.json ./
+#COPY . .
+#RUN npm install && npm run build
 
 # Bundle app source
 FROM tobi312/rpi-nginx:alpine
 #RUN mkdir build
-COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+#COPY --from=builder /usr/src/app/build /usr/share/nginx/html
+COPY /build /usr/share/nginx/html
+
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY cert.pem /etc/ssl/
 COPY key.pem /etc/ssl
