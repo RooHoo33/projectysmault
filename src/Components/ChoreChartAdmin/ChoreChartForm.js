@@ -163,8 +163,14 @@ console.log("all Chores: " + (this.props.chores !== undefined && Array.isArray(t
                    onClick={this.extendOrCollapse}
                    className="material-icons">details</p>
 
+                {this.state.form.weekNumber === "default" &&
+                <h3>Default</h3>}
+
+                {this.state.form.weekNumber !== "default" &&
                 <h3 style={{borderBottomStyle: "solid", paddingBottom: "8px"}}><small>From</small> {moment(this.state.form.weekNumber).format(momentNiceFormat).toString() + " "}
-                    <small>To</small> {moment(this.state.form.weekNumber).add(1, "week").format(momentNiceFormat).toString()}</h3>
+                    <small>To</small> {moment(this.state.form.weekNumber).add(1, "week").format(momentNiceFormat).toString()}</h3>}
+
+
 
 
                 <div style={this.getChoresAndDayStyle()} className={"choresAndDays-" + this.state.form.weekNumber}>

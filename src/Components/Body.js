@@ -2,6 +2,8 @@ import React from "react";
 
 import thetaXiLetters from "../img/lettersPurple6.png"
 import AddressFooter from "./AddressFooter";
+import * as Constants from "../constants/constants";
+
 
 import axios from 'axios';
 
@@ -24,7 +26,7 @@ class Body extends React.Component {
 
     componentDidMount() {
 
-        axios.get('http://localhost:8080/rest/users',{
+        axios.get(Constants.baseUrl + 'rest/users',{
             crossorigin:true,
             auth: {
                 username: 'test',

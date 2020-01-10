@@ -1,5 +1,5 @@
 // export const colorPrimary = "#4a80ae";
-import React from "react";
+// import React from "react";
 
 export const colorPrimary = "#2D9ED6";
 export const colorSecondary = "#aa647b";
@@ -10,6 +10,8 @@ export const colorInfo = "#1976d2";
 export const colorSuccess = "#388e3c";
 export const colorGreenMaterial = "#4BBA87";
 export const backgroundSecondaryColor = "#3f4552";
+export const lightGrey = "rgba(63,69,82,0.8)";
+
 
 
 export const listRowStyle = function getGridStyle(header = false, error = false) {
@@ -20,7 +22,7 @@ export const listRowStyle = function getGridStyle(header = false, error = false)
         borderRadius: "12px",
         textIndent: "18px",
         textAlign: "left",
-        backgroundColor: error ? this.colorError : this.colorGreenMaterial,
+        backgroundColor: error ? colorError : colorGreenMaterial,
         width: "800px",
         margin: header ? "18px auto" : "12px auto",
         fontWeight: header ? "bold" : "normal",
@@ -31,11 +33,11 @@ export const listRowStyle = function getGridStyle(header = false, error = false)
 
 export const choresAndDaysGridStyle = function (header = false, error = false, chore = true) {
 
-    let style = this.listRowStyle(false, false, true);
+    let style = listRowStyle(false, false, true);
 
     style.gridTemplateColumns = "15.5rem auto";
     style.width = "380px";
-    style.backgroundColor = error ? this.colorError : chore ? this.colorSecondary : this.colorPrimary;
+    style.backgroundColor = error ? colorError : chore ? colorSecondary : colorPrimary;
 
     return style
 
@@ -66,7 +68,26 @@ export const getHeadingStyleChoreChartAdmin = function (){
             textAlign: "left", color: "black"
         }
 
-}
+};
+export const getChortPrefernceGridItemStyle = function (choreName= false){
+    return {
+        height:"60px",
+        borderStyle: "solid",
+        borderWidth: "1px",
+        borderColor: lightGrey,
+        // padding: "10px 5px",
+        width:"100%",
+        // margin: "auto"
+        fontSize: choreName ? "18px" : "14px",
+        backgroundColor: choreName ? colorGreenMaterial : "",
+        // borderRadius: choreName ? "10px" : "2px",
+        borderRadius:"0",
+        textAlign: "center",
+        verticalAlign: "middle",
+        margin:"0",
+        paddingTop:"10px"
 
-// export const baseUrl = "https://192.168.1.202:8084/";
+    }
+};
+// export const baseUrl = "http://localhost:8080/";
 export const baseUrl = "https://roohoo.dev/";

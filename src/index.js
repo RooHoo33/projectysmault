@@ -18,14 +18,14 @@ axios.interceptors.request.use(config => {
             let xhr = new XMLHttpRequest();
             let params = JSON.stringify({jwt: document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")});
 
-            // xhr.open("POST", "https://192.168.1.202:8084/authenticate/renew", false);
+            // xhr.open("POST", "http://localhost:8080/rest/authenticate/renew", false);
             xhr.open("POST", "https://roohoo.dev/rest/authenticate/renew", false);
 
             xhr.setRequestHeader('Content-type', 'application/json');
             xhr.setRequestHeader("Authorization", "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
 
             xhr.send(params);
-            document.cookie = "jwttoken=" + JSON.parse(xhr.response).jwt;
+            document.cookie = "jwttoken=" + JSON.parse(xhr.response).jwt+ ";path=/";
 
             config.headers = {
                 Authorization: "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")

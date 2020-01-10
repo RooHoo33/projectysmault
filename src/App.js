@@ -13,6 +13,7 @@ import {
 
 import Users from "./Components/Users";
 import ChoreChartAdmin from "./Components/ChoreChartAdmin";
+import ChoreChart from "./Components/ChoreChart";
 
 // import './App.css';
 
@@ -59,6 +60,11 @@ class App extends React.Component {
                             <Route exact path="/">
                                 {/*<header className="App-header"/>*/}
                                 <Body/>
+                            </Route>
+
+                            <Route exact path="/chorechart">
+                                {/*<header className="App-header"/>*/}
+                                <ChoreChart/>
                             </Route>
 
                             <Route exact path="/chorechart/admin">

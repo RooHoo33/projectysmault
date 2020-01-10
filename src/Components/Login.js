@@ -3,7 +3,8 @@ import React from "react";
 import thetaXiLetters from "../img/lettersPurple6.png";
 import * as Constants from "../constants/constants"
 import axios from "axios"
-import { Redirect } from "react-router-dom";
+import {Redirect} from "react-router-dom";
+import autoBind from "auto-bind";
 
 
 class Login extends React.Component {
@@ -16,7 +17,10 @@ class Login extends React.Component {
             password: "",
             correctLoginInfo: true,
             hovered: false,
+            createUser: false,
         };
+
+        autoBind(this)
 
         this.handleUserNameChange = this.handleUserNameChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -59,21 +63,37 @@ class Login extends React.Component {
         }
     }
 
+    getCreateUserAMNotice() {
+        return {
+            // backgroundColor: "#282c34",
+            border: "0",
+            // height: "18px",
+            width: "80%",
+            // padding: "20px 0",
+            margin: "20px 10% 0 10%",
+            borderRadius: "5px",
+            borderWidth: "1px"
+        }
+    }
+
     getSumbitStyle() {
         return {
-            borderColor: this.state.hovered ? "#3f4552": Constants.colorPrimary,
+            // borderColor: this.state.hovered ? "#3f4552": Constants.colorPrimary,
+            borderColor: Constants.colorPrimary,
             display: "block",
             borderRadius: "15px",
             height: "40px",
-            color: this.state.hovered ? "#3f4552": Constants.colorPrimary,
+            // color: this.state.hovered ? "#3f4552": Constants.colorPrimary,
+            color: "black",
             fontSize: "100%",
             width: "120px",
             textAlign: "center",
-            margin: "0 10%",
+            marginRight: "10px",
             float: "left",
             borderStyle: "solid",
             borderWidth: "2px",
-            backgroundColor: this.state.hovered ? Constants.colorPrimary :"#3f4552" ,
+            // backgroundColor: this.state.hovered ? Constants.colorPrimary :"#3f4552" ,
+            backgroundColor: Constants.colorPrimary,
         }
     }
 
@@ -91,30 +111,94 @@ class Login extends React.Component {
         this.setState({username: event.target.value});
     }
 
+    handleCreateUser(event) {
+        event.preventDefault();
+        this.setState({createUser: !this.state.createUser})
+    }
+
+    handleFirstNameChange(event) {
+        this.setState({firstName: event.target.value});
+    }
+
+    handleLastNameChange(event) {
+        this.setState({lastName: event.target.value});
+    }
+
+    handleKappaSigmaChange(event) {
+        this.setState({kappaSimga: parseInt(event.target.value, 10)});
+    }
+
+    handleBigChange(event) {
+        this.setState({big: parseInt(event.target.value, 10)});
+    }
+
     handleSubmit(event) {
 
         let currentComp = this
 
-        let data = {
 
-            username: this.state.username,
-            password: this.state.password
+        if (this.state.createUser) {
+            let newUser = {
 
-        };
-        axios.post("http://localhost:8080/authenticate", data).then(res => {
-            const data = res.data;
-            console.log("Login JWT: " + data.jwt);
-            document.cookie = "jwttoken=" + data.jwt;
-            currentComp.setState({redirect: true})
+                userName: this.state.username,
+                password: this.state.password,
+                big: this.state.big,
+                kappaSigma: this.state.kappaSimga,
+                brother: this.state.kappaSimga !== 0,
+                firstName: this.state.firstName,
+                lastName: this.state.lastName
+            };
+
+                axios.post(Constants.baseUrl + "rest/security/createuser", newUser).then(res => {
+                    currentComp.setState({createUser:false, redirectFromCreateUser: true})
+
+                })
+
+            //     @get: NotBlank
+            //     val firstName: String = "",
+            // @get: NotBlank
+            // var password: String = "",
+            //     @get: NotBlank
+            // val lastName: String = "",
+            //
+            // @get: NotNull
+            // val kappaSigma: Int = 0,
+            //
+            // @get: NotNull
+            // val big: Int = 0,
+            // @get: NotNull
+            // val brother: Boolean = false,
+            //
+            // @get: NotNull
+            // val active: Boolean = true
 
 
-        }).catch(function (error) {
 
-            if (error.response.status === 401) {
-                currentComp.setState({correctLoginInfo: false});
-            }
+        } else {
 
-        });
+            let data = {
+
+                username: this.state.username,
+                password: this.state.password
+
+            };
+            axios.post(Constants.baseUrl + "rest/authenticate", data).then(res => {
+                const data = res.data;
+                console.log("Login JWT: " + data.jwt);
+                document.cookie = "jwttoken=" + data.jwt;
+                currentComp.setState({redirect: true})
+
+
+            }).catch(function (error) {
+
+                if (error.response.status === 401) {
+                    currentComp.setState({correctLoginInfo: false});
+                }
+
+            });
+
+        }
+
 
         event.preventDefault();
     }
@@ -123,7 +207,8 @@ class Login extends React.Component {
         this.setState({password: event.target.value});
     }
 
-    toggleHover = () => this.setState({hovered:!this.state.hovered});
+    toggleHover = () => this.setState({hovered: !this.state.hovered});
+
 
 
 
@@ -146,7 +231,11 @@ class Login extends React.Component {
 
                         }
 
-                        {this.state.correctLoginInfo && <h1 className={"loginPage"} style={this.getTopTextStyle()}>Welcome</h1>}
+                        {this.state.correctLoginInfo &&
+                        <h1 className={"loginPage"} style={this.getTopTextStyle()}>Welcome</h1>}
+
+                        {this.state.redirectFromCreateUser &&
+                        <h2 style={this.getTopTextStyle()}>Please Now Login</h2>}
 
 
                         <div className={"input"} style={{display: "block"}}>
@@ -157,14 +246,38 @@ class Login extends React.Component {
                             <input type={"password"} placeholder={"Password"} className={"login-input"}
                                    style={this.getLoginTextInputStyle()} value={this.state.password}
                                    onChange={this.handlePasswordChange}/>
+                            {this.state.createUser && <div className={"createUser"}>
+                                <input placeholder={"First Name"} className={"login-input"}
+                                       style={this.getLoginTextInputStyle()} value={this.state.firstName}
+                                       onChange={this.handleFirstNameChange}/>
+                                <input placeholder={"Last Name"} className={"login-input"}
+                                       style={this.getLoginTextInputStyle()} value={this.state.lastName}
+                                       onChange={this.handleLastNameChange}/>
+                                <input type={"number"} placeholder={"Big"} className={"login-input"}
+                                       style={this.getLoginTextInputStyle()} value={this.state.big}
+                                       onChange={this.handleBigChange}/>
+                                <p style={this.getCreateUserAMNotice()}>Set as 0 if you are an Associate Memeber</p>
+                                <input type={"number"} placeholder={"Kappa Simga"} className={"login-input"}
+                                       style={this.getLoginTextInputStyle()} value={this.state.kappaSimga}
+                                       onChange={this.handleKappaSigmaChange}/>
+
+                            </div>}
+
 
                         </div>
 
-                        <div style={{margin: "15px 0"}}>
+                        <div style={{margin: "15px 10%"}}>
 
                             <button style={this.getSumbitStyle()} type="submit"
-                                     value="Submit" onMouseLeave={this.toggleHover} onMouseEnter={this.toggleHover}>Submit
+                                    value="Submit" onMouseLeave={this.toggleHover}
+                                    onMouseEnter={this.toggleHover}>Submit
                             </button>
+                            {!this.state.createUser &&
+                            <button style={this.getSumbitStyle()} onClick={this.handleCreateUser}
+                                    onMouseLeave={this.toggleHover} onMouseEnter={this.toggleHover}>Create User
+                            </button>
+                            }
+
 
                         </div>
 

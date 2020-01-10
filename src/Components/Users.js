@@ -1,4 +1,5 @@
 import React from "react";
+import * as Constants from "../constants/constants";
 
 import axios from 'axios';
 import App from "../App";
@@ -36,7 +37,7 @@ class Users extends React.Component {
             }
         };
 
-        axios.get("http://localhost:8080/rest/users", config).then(res => {
+        axios.get(Constants.baseUrl + "rest/users", config).then(res => {
             const users = res.data;
             this.setState({users: users});
         }).catch(function (error) {
