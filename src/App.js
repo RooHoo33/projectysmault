@@ -4,6 +4,8 @@ import HeaderButton from "./Components/HeaderButton";
 import Body from "./Components/Body";
 import Login from "./Components/Login";
 import HeaderHomeButton from "./Components/HeaderHomeButton"
+import decode from "jwt-decode";
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -14,6 +16,7 @@ import {
 import Users from "./Components/Users";
 import ChoreChartAdmin from "./Components/ChoreChartAdmin";
 import ChoreChart from "./Components/ChoreChart";
+import SignOut from "./Components/SignOut";
 
 // import './App.css';
 
@@ -35,6 +38,20 @@ class App extends React.Component {
         this.setState({auth: auth})
     }
 
+    componentDidMount() {
+
+        let loggedIn = false;
+
+        if (document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")){
+            if (decode(document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")).exp > Date.now() / 1000){
+                loggedIn = true
+            }
+        }
+
+
+        this.setState({loginButtonMessage: loggedIn? "Sign Out" : "Log In", loggedIn: loggedIn});
+    }
+
 
     render() {
 
@@ -45,7 +62,7 @@ class App extends React.Component {
 
             <div className="App">
                 <div className={"header"} >
-                    <HeaderButton displayName={"Log In"} link={"/login"}/>
+                    <HeaderButton displayName={this.state.loginButtonMessage} link={this.state.loggedIn? "/signout" : "/login"}/>
                     <HeaderButton displayName={"Chore Chart"} link={"/chorechart"}/>
                     <HeaderButton displayName={"Users"} link={"/users"}/>
                     <HeaderHomeButton displayName={"Home"} link={"/"}/>
@@ -77,6 +94,10 @@ class App extends React.Component {
                             </Route>
                             <Route exact path={"/login"}>
                                 <Login/>
+                            </Route>
+
+                            <Route exact path={"/signout"}>
+                                <SignOut/>
                             </Route>
 
 

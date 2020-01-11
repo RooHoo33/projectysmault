@@ -2,6 +2,7 @@ import React from "react";
 import axios from "axios";
 import * as Constants from "../constants/constants";
 import autoBind from "auto-bind";
+import decode from "jwt-decode";
 
 class ChoreChartDisplay extends React.Component {
 
@@ -14,6 +15,7 @@ class ChoreChartDisplay extends React.Component {
             hover: false,
             identicalPreferences: false,
             choreFormsLoaded: false,
+            week:"",
 
         };
         autoBind(this)
@@ -22,7 +24,10 @@ class ChoreChartDisplay extends React.Component {
 
     componentDidMount() {
 
-        axios.get(Constants.baseUrl + "rest/chorechart/admin/createchorechart").then(res => {
+        const decoded = decode(document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));
+        this.setState({chairmen: decoded.matComChairmen});
+
+        axios.get(Constants.baseUrl + "rest/chorechart/chorechart").then(res => {
             const choresDaysAndUsers = res.data;
 
             // if (jsonForms.length !== 1) {
@@ -108,6 +113,80 @@ class ChoreChartDisplay extends React.Component {
         }
     }
 
+    createChoreChartButtonsStyle(){
+        return {
+            textIndent: "6px",
+            padding: "10px 6px",
+            marginLeft:"10px",
+            backgroundColor: Constants.colorPrimary,
+            width:"230px",
+            borderRadius:"10px"
+        }
+    }
+
+    handleCreateChoreChart(){
+        if (this.state.week === ""){
+            console.log("no week");
+            return
+        }
+
+        console.log(this.state.week)
+        let currentComp = this
+
+        let data = {
+            week: this.state.week,
+            kappaSigmaOrder: true
+        }
+
+        axios.post(Constants.baseUrl + "rest/chorechart/admin/createchorechart", data).then(res => {
+            currentComp.setState({week: ""})
+
+        }).catch(function (error) {
+            console.log(error)
+            currentComp.setState({error: true})
+        })
+
+    }
+
+    handleCreateReverse(){
+        if (this.state.week === ""){
+            console.log("no week");
+            return
+        }
+
+        console.log(this.state.week)
+        let currentComp = this
+
+        let data = {
+            week: this.state.week,
+            kappaSigmaOrder: false
+        }
+
+        axios.post(Constants.baseUrl + "rest/chorechart/admin/createchorechart", data).then(res => {
+            currentComp.setState({week: ""})
+
+        }).catch(function (error) {
+            console.log(error)
+            currentComp.setState({error: true})
+        })
+
+    }
+
+    handlWeekUpdate(event){
+
+        this.setState({week: event.target.value})
+
+    }
+    weekStyle(){
+        return {
+            backgroundColor: Constants.backgroundSecondaryColor,
+            borderColor:Constants.colorPrimary,
+            borderWidth:"2px",
+            borderRadius: "4px",
+            marginLeft:"10px"
+        }
+    }
+
 
 
     render() {
@@ -124,7 +203,20 @@ class ChoreChartDisplay extends React.Component {
                 borderRadius: "10px",
             }} className={"chorechartdisplayParent"}>
                 <h1 style={{textIndent: "10px"}}>Chore Chart</h1>
+                {this.state.chairmen && <div>
+
+                    <p>Week:  </p>
+                    <input type={"week"} className={"login-input"}
+                           style={this.weekStyle()}
+                           onChange={this.handlWeekUpdate}/>
+                    <p style={this.createChoreChartButtonsStyle()}
+                       onClick={this.handleCreateChoreChart}>Create &#922;&#931; order Chore Chart</p>
+                    <p style={this.createChoreChartButtonsStyle()}
+                       onClick={this.handleCreateReverse}> Create Reverse &#922;&#931; Chore Chart</p>
+                </div>}
+
                 <div style={this.getDayStyle()} className={"choreChartDisplay"}>
+
 
 
                     <div className={"chores"}>
@@ -150,7 +242,7 @@ class ChoreChartDisplay extends React.Component {
                                     }
 
                                     {(chore.user.kappaSigma !== 0 && chore.user.kappaSigma !== 99999) &&
-                                    <p style={this.getCellStyles()}>&#922;    &#931; {" " + chore.user.kappaSigma}</p>
+                                    <p style={this.getCellStyles()}>&#922;&#931; {" " + chore.user.kappaSigma}</p>
                                     }
                                 </div>
                             })}
