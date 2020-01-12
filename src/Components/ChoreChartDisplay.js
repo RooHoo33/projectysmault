@@ -16,6 +16,7 @@ class ChoreChartDisplay extends React.Component {
             identicalPreferences: false,
             choreFormsLoaded: false,
             week:"",
+            choreChartExits: false,
 
         };
         autoBind(this)
@@ -60,6 +61,12 @@ class ChoreChartDisplay extends React.Component {
             let key = Object.keys(form)[0];
 
             let chores = [];
+
+            if (Object.entries(form).length === 0 && form.constructor === Object){
+                this.setState({choreFormsLoaded:true})
+                console.log("WE ARE DOING IT")
+                return
+            }
             form[key].chores.forEach(function (choreAndUser) {
                 chores.push(choreAndUser.chore.name)
             })
@@ -69,6 +76,7 @@ class ChoreChartDisplay extends React.Component {
                 choreFormsLoaded: true,
                 chores: chores,
                 numberOfDays: Object.keys(form).length,
+                choreChartExits: true
 
             })
 
@@ -215,8 +223,10 @@ class ChoreChartDisplay extends React.Component {
                        onClick={this.handleCreateReverse}> Create Reverse &#922;&#931; Chore Chart</p>
                 </div>}
 
+                {!this.state.choreChartExits && <h3>No Chores Exist for this week yet</h3>
+                }
+                {this.state.choreChartExits &&
                 <div style={this.getDayStyle()} className={"choreChartDisplay"}>
-
 
 
                     <div className={"chores"}>
@@ -236,7 +246,7 @@ class ChoreChartDisplay extends React.Component {
                             {this.state.choreForm[dayAndChoresKey].chores.map(chore => {
                                 return <div className={"userName"}>
                                     {chore.user.kappaSigma === 0 &&
-                                    <p style={this.getCellStyles(false,true)}>{chore.user.firstName}</p>}
+                                    <p style={this.getCellStyles(false, true)}>{chore.user.firstName}</p>}
                                     {(chore.user.kappaSigma === 99999) &&
                                     <p style={this.getCellStyles()}>{chore.user.firstName + " " + chore.user.lastName}</p>
                                     }
@@ -253,6 +263,7 @@ class ChoreChartDisplay extends React.Component {
 
 
                 </div>
+                }
             </div>
         )
     }

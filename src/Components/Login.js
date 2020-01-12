@@ -150,9 +150,22 @@ class Login extends React.Component {
             };
 
                 axios.post(Constants.baseUrl + "rest/security/createuser", newUser).then(res => {
-                    currentComp.setState({createUser:false, redirectFromCreateUser: true})
 
-                })
+                    if (res.data.usernameTaken){
+                        this.setState({usernameTaken: res.data.usernameTaken})
+                    }
+                    else {
+                        currentComp.setState({createUser:false, redirectFromCreateUser: true, usernameTaken: res.data.usernameTaken})
+
+                    }
+
+                }).catch(function (error) {
+                    console.log(error.response)
+                    if (error.response.status === 401){
+                        currentComp.setState({loggedOn: false})
+                    }
+                    // currentComponent.setState({loggedOn: false})
+                });
 
             //     @get: NotBlank
             //     val firstName: String = "",
@@ -237,6 +250,11 @@ class Login extends React.Component {
                         {this.state.redirectFromCreateUser &&
                         <h2 style={this.getTopTextStyle()}>Please Now Login</h2>}
 
+                        {this.state.usernameTaken &&
+                        <label style={this.getErrorStyle()}> Username Already Taken, Please Use A Different One</label>
+
+                        }
+
 
                         <div className={"input"} style={{display: "block"}}>
 
@@ -253,11 +271,11 @@ class Login extends React.Component {
                                 <input placeholder={"Last Name"} className={"login-input"}
                                        style={this.getLoginTextInputStyle()} value={this.state.lastName}
                                        onChange={this.handleLastNameChange}/>
-                                <input type={"number"} placeholder={"Big"} className={"login-input"}
+                                <input type={"number"} placeholder={"Big's Kappa Sigma"} className={"login-input"}
                                        style={this.getLoginTextInputStyle()} value={this.state.big}
                                        onChange={this.handleBigChange}/>
                                 <p style={this.getCreateUserAMNotice()}>Set as 0 if you are an Associate Memeber</p>
-                                <input type={"number"} placeholder={"Kappa Simga"} className={"login-input"}
+                                <input type={"number"} placeholder={"Your Kappa Simga"} className={"login-input"}
                                        style={this.getLoginTextInputStyle()} value={this.state.kappaSimga}
                                        onChange={this.handleKappaSigmaChange}/>
 

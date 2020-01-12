@@ -5,6 +5,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import axios from 'axios';
 import decode from "jwt-decode";
+import * as Constants from './constants/constants'
 
 
 
@@ -19,7 +20,7 @@ axios.interceptors.request.use(config => {
             let params = JSON.stringify({jwt: document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1")});
 
             // xhr.open("POST", "http://localhost:8080/rest/authenticate/renew", false);
-            xhr.open("POST", "https://roohoo.dev/rest/authenticate/renew", false);
+            xhr.open("POST", Constants.baseUrl + "rest/authenticate/renew", false);
 
             xhr.setRequestHeader('Content-type', 'application/json');
             xhr.setRequestHeader("Authorization", "Bearer " + document.cookie.replace(/(?:(?:^|.*;\s*)jwttoken\s*\=\s*([^;]*).*$)|^.*$/, "$1"));

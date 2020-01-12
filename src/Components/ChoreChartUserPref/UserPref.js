@@ -100,7 +100,7 @@ class UserPref extends React.Component {
         this.state.userPrefs.forEach(function (userPref) {
             currentComponent.state.userPrefs.forEach(function (userPrefCompare) {
 
-                if (userPref.preferenceRanking === userPrefCompare.preferenceRanking && !(userPref.choreId === userPrefCompare.choreId && userPref.day_id === userPrefCompare.day_id)) {
+                if (userPref.preferenceRanking !== 0 && (userPref.preferenceRanking === userPrefCompare.preferenceRanking && !(userPref.choreId === userPrefCompare.choreId && userPref.day_id === userPrefCompare.day_id))) {
 
                     identicalPreference = true;
                 }
