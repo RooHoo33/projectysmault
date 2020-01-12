@@ -11,3 +11,13 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+input.login-input::placeholder, input.login-input{ /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: white;
+  text-indent: 10px;
+  font-size: 22px;
+  letter-spacing: 2px;
+  vertical-align: middle;
+  opacity: 1; /* Firefox */
+}
+

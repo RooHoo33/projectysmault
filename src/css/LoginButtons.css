@@ -1,0 +1,44 @@
+button.login-page-button {
+    background-color: #4acfac;
+    border-radius: 5px;
+    width:80%;
+    margin: 0 auto;
+    display: block;
+    height: 40px;
+    font-size: 25px;
+    border-style: none;
+    color: white;
+    text-align: left;
+    transition: all 0.5s;
+
+}
+
+
+[type=button]:not(:disabled),[type=reset]:not(:disabled),[type=submit]:not(:disabled),button:not(:disabled) {
+    cursor: pointer;
+}
+
+.login-page-button span {
+    cursor: pointer;
+    /* display: inline-block; */
+    position: relative;
+    transition: 0.5s;
+}
+
+.login-page-button span:after {
+    content: '\00bb';
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: -20px;
+    transition: 0.5s;
+}
+
+.login-page-button:hover span {
+    padding-right: 25px;
+}
+
+.login-page-button:hover span:after {
+    opacity: 1;
+    right: 0;
+}

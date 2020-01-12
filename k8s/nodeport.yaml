@@ -1,0 +1,11 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: project-ysmault-nodeport
+
+spec:
+  selector:
+    app: py-server
+  type: NodePort
+  ports:
+    - port: 556
