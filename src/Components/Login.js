@@ -120,6 +120,10 @@ class Login extends React.Component {
         this.setState({firstName: event.target.value});
     }
 
+    handleEmailChange(event){
+        this.setState({email:event.target.value})
+    }
+
     handleLastNameChange(event) {
         this.setState({lastName: event.target.value});
     }
@@ -146,7 +150,8 @@ class Login extends React.Component {
                 kappaSigma: this.state.kappaSimga,
                 brother: this.state.kappaSimga !== 0,
                 firstName: this.state.firstName,
-                lastName: this.state.lastName
+                lastName: this.state.lastName,
+                email: this.state.email
             };
 
                 axios.post(Constants.baseUrl + "rest/security/createuser", newUser).then(res => {
@@ -271,6 +276,9 @@ class Login extends React.Component {
                                 <input placeholder={"Last Name"} className={"login-input"}
                                        style={this.getLoginTextInputStyle()} value={this.state.lastName}
                                        onChange={this.handleLastNameChange}/>
+                                <input placeholder={"Email Address"} className={"login-input"}
+                                       style={this.getLoginTextInputStyle()} value={this.state.email}
+                                       onChange={this.handleEmailChange}/>
                                 <input type={"number"} placeholder={"Big's Kappa Sigma"} className={"login-input"}
                                        style={this.getLoginTextInputStyle()} value={this.state.big}
                                        onChange={this.handleBigChange}/>
