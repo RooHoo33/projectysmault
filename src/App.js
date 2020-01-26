@@ -64,7 +64,7 @@ class App extends React.Component {
                 <div className={"header"} >
                     <HeaderButton displayName={this.state.loginButtonMessage} link={this.state.loggedIn? "/signout" : "/login"}/>
                     <HeaderButton displayName={"Chore Chart"} link={"/chorechart"}/>
-                    <HeaderButton displayName={"Users"} link={"/users"}/>
+                    {/*<HeaderButton displayName={"Users"} link={"/users"}/>*/}
                     <HeaderHomeButton displayName={"Home"} link={"/"}/>
 
                 </div>
@@ -89,9 +89,9 @@ class App extends React.Component {
                             </Route>
 
 
-                            <Route exact path="/users">
-                                <Users setAuth={this.setAuth}/>
-                            </Route>
+                            {/*<Route exact path="/users">*/}
+                            {/*    <Users setAuth={this.setAuth}/>*/}
+                            {/*</Route>*/}
                             <Route exact path={"/login"}>
                                 <Login/>
                             </Route>

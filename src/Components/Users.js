@@ -2,8 +2,7 @@ import React from "react";
 import * as Constants from "../constants/constants";
 
 import axios from 'axios';
-import App from "../App";
-import {Route, Redirect} from "react-router-dom";
+import {Redirect} from "react-router-dom";
 
 
 class Users extends React.Component {
