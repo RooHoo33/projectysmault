@@ -13,7 +13,6 @@ import {
     // Link
 } from "react-router-dom";
 
-import Users from "./Components/Users";
 import ChoreChartAdmin from "./Components/ChoreChartAdmin";
 import ChoreChart from "./Components/ChoreChart";
 import SignOut from "./Components/SignOut";
